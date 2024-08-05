@@ -1,12 +1,22 @@
-
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './App.css';
-import AuthComponent from './components/loginPage/login'
+import AuthComponent from './components/LoginPage/index'
+import Header from './components/Header/index'
+import Home from './components/HomePage/index'
 
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline">
-    <AuthComponent/>
-  </h1>
+    <Router>
+    <div className="min-h-screen bg-custom-light-blue font-aktiv-grotesk">
+        <Header />
+        <Routes>
+          <Route path="/login" element={<AuthComponent/>} />
+          {/* <Route path="/signup" component={Signup} /> */}
+          <Route path="/" element={<Home/>} />
+        </Routes> 
+      </div>
+  </Router>
   );
 }
 

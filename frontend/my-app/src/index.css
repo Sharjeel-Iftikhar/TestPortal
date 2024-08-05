@@ -1,6 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  @apply bg-custom-light-blue font-aktiv-grotesk;
+}
+@screen lg {
+  .container {
+    max-width: 1088px;
+  }
+}
+
+@layer utilities {
+  .divider {
+    @apply border-none h-[1.5px] bg-[#dfe6ed] my-7 mx-auto w-[344px] flex-shrink-0;
+  }
+}
 /* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
