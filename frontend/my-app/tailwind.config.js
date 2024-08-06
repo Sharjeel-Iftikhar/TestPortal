@@ -13,9 +13,9 @@ module.exports = {
       boxShadow: {
         'custom-light': '3px 4px 10px rgba(36, 50, 57, 0.03)',
       },
-      maxWidth: {
-        '1088px': '1088px', 
-      },
+      // maxWidth: {
+      //   '1088px': '1088px', 
+      // },
         screens: {
           'lg': '1025px',
       },

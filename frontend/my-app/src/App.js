@@ -8,11 +8,11 @@ import Home from './components/HomePage/index'
 function App() {
   return (
     <Router>
-    <div className="min-h-screen bg-custom-light-blue font-aktiv-grotesk">
+    <div className=" bg-custom-light-blue font-aktiv-grotesk">
         <Header />
         <Routes>
           <Route path="/login" element={<AuthComponent/>} />
-          {/* <Route path="/signup" component={Signup} /> */}
+          <Route path="/signup" element={<AuthComponent/>} />
           <Route path="/" element={<Home/>} />
         </Routes> 
       </div>
