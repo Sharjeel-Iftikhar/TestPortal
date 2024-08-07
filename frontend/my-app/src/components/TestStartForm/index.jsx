@@ -91,44 +91,6 @@ export default function TestStartForm() {
         Start test
       </button>
     </form>
-
-          {/* <form className="" onSubmit={handleSubmit}>
-            <div>
-              <label className="block text-sm leading-5 font-normal tracking-normal text-custom-dark mb-2">
-                First name
-              </label>
-              <input
-                type="text"
-                name="First name"
-                value={formData.FirstName}
-                onChange={handleChange}
-                required
-                className="w-full pt-3 pb-[14px] pl-[10px] pr-[10px]  h-[42px] overflow-visible px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-green-400 text-[1rem] leading-5 font-normal tracking-normal text-custom-dark"
-              />
-            </div>
-            <div>
-              <label className="block text-sm leading-5 font-normal tracking-normal text-custom-dark mb-2 mt-3">
-                Last name
-              </label>
-              <input
-                type="text"
-                name="Last name"
-                value={formData.LastName}
-                onChange={handleChange}
-                required
-                className="w-full pt-3 pb-[14px] pl-[10px] pr-[10px] mb-2  h-[42px] overflow-visible px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-green-400 text-[1rem] leading-5 font-normal tracking-normal text-custom-dark"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className={`w-full ${
-                isSignUp ? "mt-[33px]" : "mt-[15px]"
-              } py-2 bg-custom-button-color text-white rounded hover:bg-green-600 transition duration-300`}
-            >
-              Start
-            </button>
-          </form> */}
         </div>
       </div>
     </div>
