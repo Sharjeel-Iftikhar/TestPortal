@@ -9,20 +9,11 @@ const quizData = {
     _id: "66b0b243b295199693ace992",
     title: "Sample Reasoning Test",
     questions: [
-      {
-        category: "Generic",
-        questionText: "Which of the following is not a primary color?",
-        options: [
-          { optionText: "A", isCorrect: true, _id: "66b0b243b295199693ace999" },
-          { optionText: "B", isCorrect: false, _id: "66b0b243b295199693ace99a" },
-          { optionText: "C", isCorrect: true, _id: "66b0b243b295199693ace99b" },
-          { optionText: "D", isCorrect: true, _id: "66b0b243b295199693ace99c" },
-        ],
-      },
+      
       {
         category: "Data-Analysis",
         questionText: "Which factories have production results higher than 350 in 2019?",
-        questionImageURL: "https://utfs.io/f/3e54985e-66c1-49a6-b6ff-6e3fa498ea0a-5cp1kc.jpg",
+        questionImageURL: "https://utfs.io/f/d0910598-57fa-491f-acba-9750fb059830-i46u8p.png",
         options: [
           { optionText: "A", isCorrect: true, _id: "66b0b243b295199693ace993" },
           { optionText: "B", isCorrect: false, _id: "66b0b243b295199693ace994" },
@@ -33,9 +24,19 @@ const quizData = {
       {
         category: "Data-Analysis",
         questionText: "Please consider the following production results of 5 factories.",
-        questionImageURL: "https://drive.google.com/file/d/1AZEblHK5qvbnB1u7ep-f_3NS5rMpwO0g/view",
+        questionImageURL: "https://utfs.io/f/2446d75d-0fb4-4f71-acd0-5171a1c0e288-ebynfq.png",
         options: [
           { optionText: "Answer", isCorrect: true, _id: "66b0b243b295199693ace997" },
+        ],
+      },
+      {
+        category: "Generic",
+        questionText: "Which of the following is not a primary color?",
+        options: [
+          { optionText: "A", isCorrect: true, _id: "66b0b243b295199693ace999" },
+          { optionText: "B", isCorrect: false, _id: "66b0b243b295199693ace99a" },
+          { optionText: "C", isCorrect: true, _id: "66b0b243b295199693ace99b" },
+          { optionText: "D", isCorrect: true, _id: "66b0b243b295199693ace99c" },
         ],
       },
     ],
@@ -54,22 +55,20 @@ const Quiz = () => {
   // Dispatch the quiz data to the Redux store
   useEffect(() => {
     dispatch(setQuiz(quizData));
-  },[dispatch]);
+  },[dispatch]); 
 
 
   useEffect(() => {
+    if (timeLeft === 0) {
+      handleNextQuestion(); 
+    }
+    
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev === 1) {
-          handleNextQuestion();
-          return 120; // Reset timer for next question
-        }
-        return prev - 1;
-      });
+      setTimeLeft((prev) => prev > 0 ? prev - 1 : 0);
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex]);
+  }, [timeLeft, currentQuestionIndex]);
 
 
   const handleNextQuestion = () => {

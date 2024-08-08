@@ -1,10 +1,14 @@
+// import { useNavigate } from "react-router-dom";
 function QuestionCard({
+
   currentQuestionIndex,
+
   questions,
   handleNextQuestion,
   selectedOption,
   setSelectedOption,
 }) {
+  // const navigate = useNavigate();
   const currentQuestion = questions[currentQuestionIndex];
   const isMultipleChoice =
     currentQuestion.options.filter((option) => option.isCorrect).length > 1;
@@ -12,19 +16,23 @@ function QuestionCard({
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(selectedOption);
+    // navigate('/record');
     handleNextQuestion();
+
   };
 
   const renderOptions = () => {
     if (currentQuestion.options.length === 1) {
       return (
+        <div className="flex flex-col space-y-4">
         <input
           type="text"
-          className="w-full p-2 border border-gray-300 rounded"
+          className="w-[30%] p-2 border-b-2 border-gray-300 focus:border-green-500 outline-none mb-6 mt-4"
           placeholder="Type your answer here"
           value={selectedOption || ""}
           onChange={(e) => setSelectedOption(e.target.value)}
         />
+        </div>
       );
     } else if (currentQuestion.options.length === 2) {
       return currentQuestion.options.map((option, index) => (
@@ -40,11 +48,11 @@ function QuestionCard({
       ));
     } else if (isMultipleChoice) {
       return currentQuestion.options.map((option, index) => (
-        <div key={index} className="flex items-center mb-2">
+        <div key={index} className="flex items-center mb-5 mt-5" >
           <input
             type="checkbox"
             name="option"
-            className="mr-2 h-5 w-5 border-gray-300 rounded-sm text-green-500 focus:ring-green-500"
+            className="mr-4 h-6 w-6 border-gray-300 rounded-sm text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent"
             checked={selectedOption.includes(option.optionText)}
             onChange={() => {
               if (selectedOption.includes(option.optionText)) {
@@ -62,11 +70,11 @@ function QuestionCard({
       ));
     } else {
       return currentQuestion.options.map((option, index) => (
-        <div key={index} className="flex items-center mb-2">
+        <div key={index} className="flex items-center mb-5 mt-5">
           <input
             type="radio"
             name="option"
-            className="mr-2 h-5 w-5 border-gray-300 rounded-sm text-green-500 focus:ring-green-500"
+            className="mr-4 h-6 w-6 border-gray-300 rounded-sm text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent"
             checked={selectedOption === option.optionText}
             onChange={() => setSelectedOption(option.optionText)}
           />
@@ -91,7 +99,7 @@ function QuestionCard({
   };
 
   return (
-    <div className="container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto pt-[25px] box-border relative">
+    <div className="container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto pt-[25px] box-border relative mt-[5.9rem]">
       <div
         className="test-card mt-[70px]"
         style={{ boxShadow: "3px 4px 10px rgba(201, 216, 225, .34)" }}
@@ -112,7 +120,7 @@ function QuestionCard({
               <img
                 src={currentQuestion.questionImageURL}
                 alt="Question"
-                className="mt-2 w-full h-auto"
+                className="mt-2 w-[515px] h-auto object-contain"
               />
             )}
           </div>
@@ -120,7 +128,8 @@ function QuestionCard({
             {renderOptions()}
             <button
               type="submit"
-              className="mt-4 py-2 px-4 bg-custom-button-color text-white rounded hover:bg-green-600 transition duration-300"
+              className="mt-4 py-2 px-4 bg-white text-black rounded hover:text-green-600 hover:outline-none
+              hover:border-green-400  transition duration-300 border border-gray-400"
             >
               Submit
             </button>

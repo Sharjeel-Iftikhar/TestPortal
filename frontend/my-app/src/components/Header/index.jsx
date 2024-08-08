@@ -33,7 +33,7 @@ const Header = ({ timeLeft }) => {
   return (
     <header
       style={{ boxShadow: '3px 4px 10px rgba(36, 50, 57, 0.03)' }}
-      className={`bg-white border-b border-gray-200 w-full flex items-center ${isAuthScreen ? 'h-[57px]' : 'fixed z-10 h-[71px]'}`}
+      className={`bg-white border-b border-gray-200 w-full flex items-center ${isAuthScreen ? 'h-[57px]' : 'fixed top-0  z-10 h-[71px]'}`}
     >
       <div className={`container lg:mx-auto 2xl:pl-[186px] 2xl:pr-[186px] ${isAuthScreen ? 'flex justify-center' : 'flex justify-between'}`}>
         <span className={`h-8`}>

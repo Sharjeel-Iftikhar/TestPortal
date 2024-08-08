@@ -12,7 +12,7 @@ body {
 }
 @screen md {
   .container {
-    /* padding:  0 25px; */
+    padding:  0 25px;
   }
 }
 @screen 2xl{
@@ -46,6 +46,8 @@ body {
     width: 103px;
     background-size: contain;
 }
+
+
 /* body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
