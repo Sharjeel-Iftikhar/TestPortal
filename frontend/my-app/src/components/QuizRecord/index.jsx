@@ -3,9 +3,8 @@ import Header from '../Header'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useState, useEffect } from 'react';
-import QuestionItem from '../New/QuestionItem';
 import {useSelector } from 'react-redux';
-import QuestionList from '../New/QuestionList';
+import QuestionList from '../QuestionList/QuestionList';
 
 export default function QuizRecord() {
 

@@ -40,6 +40,17 @@ const QuestionList = ({ questions }) => {
         <hr className='ml-[-20px] mb-0 mt-5 h-[1px] 'style={{width: 'calc(100% + 40px)', backgroundColor: 'rgba(0, 0, 0, .12)'}} />
 
 
+        {/* Question items */}
+
+        {/* { questions.map((question, index) => (
+          <QuestionItem
+            key={index}
+            question={question}
+            expanded={expanded}
+          />
+        ))} */}
+
+
 
       {/* <button
         onClick={handleToggleAll}
@@ -50,13 +61,7 @@ const QuestionList = ({ questions }) => {
       <div>
       {console.log(questions.length)}
 
-        { questions.map((question, index) => (
-          <QuestionItem
-            key={index}
-            question={question}
-            expanded={expanded}
-          />
-        ))}
+        
       </div> */}
     </div>
   );

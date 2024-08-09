@@ -9,8 +9,8 @@ export const register =  async (req,res) =>{
             email,
             password, 
         } = req.body;
-
-        // console.log(email,password , "email and password");
+        console.log(req.body);
+        console.log(email,password , "email and password");
         const salt = await bcrypt.genSalt();
         const hashedPassword = await bcrypt.hash(password,salt);
         const newUser = new User({

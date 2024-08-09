@@ -2,9 +2,16 @@ import React, { useState } from "react";
 
 import CheckboxWithValidation from "./checkButton";
 
+import {login} from "../../state/index";
+import { useDispatch } from "react-redux";
+
 import { useNavigate, useLocation } from 'react-router-dom';
+import Header from "../Header";
+
 
 const AuthComponent = () => {
+
+  const dispatch = useDispatch();
 
   const location = useLocation(); // Get the current location
   const navigate = useNavigate();
@@ -25,6 +32,62 @@ const AuthComponent = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const register = async ({formData}) => {
+    try{
+      console.log('Sign up data:', formData);
+    const response =  await fetch('http://localhost:3000/exam/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": '*', // Required for CORS support to work
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    console.log(data);
+    if (data) {
+      setFormData({ email: '', password: '' });
+      navigate('/login');
+    }
+    }
+    catch(err){
+      console.log(err);
+    }
+    
+
+  }
+
+
+  const setlogin = async ({formData}) => {
+    try{
+      console.log('Sign in data:', formData);
+    const response =  await fetch('http://localhost:3000/exam/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        "Access-Control-Allow-Origin": '*', // Required for CORS support to work
+      },
+      body: JSON.stringify(formData),
+    });
+    const data = await response.json();
+    console.log(data.user);
+    console.log(data.token);
+    if (data) {
+      dispatch(login({
+        user: data.user,
+        token: data.token,
+      }));
+      navigate('/');
+
+
+    }
+    }
+    catch(err){
+      console.log(err);
+    }
+    
+  }
+
   const handleSubmit = (e) => {
 
     e.preventDefault();
@@ -34,15 +97,18 @@ const AuthComponent = () => {
       setShowError(false);
       if (isSignUp) {
         // Handle sign-up logic here
-        console.log('Sign up data:', formData);
+        register({formData});
+        
       } else {
         // Handle sign-in logic here
-        console.log('Sign in data:', formData);
+        setlogin({formData});
       }
     }
   };
 
   return (
+    <>
+    <Header />
     <div className="flex flex-col items-center bg-gray-100 w-full mx-auto mb-[18px]">
       <div className={`${isSignUp ? 'pt-0 pr-6 pb-7 pl-6' : 'pt-0 pr-6 pb-7 pl-6 '} bg-white rounded-[6px] shadow-custom-light w-full max-w-[484px] mt-[48px]`}>
         <h1
@@ -168,6 +234,7 @@ const AuthComponent = () => {
             </div>
           )}
     </div>
+    </>
   );
 };
 

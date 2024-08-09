@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: null,
   token: null,
+  firstname: '',
+  lastname: '',
   quiz: {
     title: '',
     questions: []
@@ -43,12 +45,22 @@ export const authSlice = createSlice({
         endTime: null
       };
     },
+    setName: (state, action) => {
+      state.firstname = action.payload.firstname;
+      state.lastname = action.payload.lastname;
+    },
+
     setQuiz: (state, action) => {
+
+    console.log(JSON.stringify(action.payload.title));
       state.quiz.title = action.payload.title;
       state.quiz.questions = action.payload.questions;
-      state.record.quizId = action.payload._id; // Assuming _id is passed with the quiz data
-      state.record.userId = state.user?._id || ''; // Set the user ID if available
-      state.record.startTime = new Date().toISOString(); // Set start time when the quiz is loaded
+     
+    },
+    recordQuiz: (state, action) => {
+        state.record.quizId = action.payload._id; // Assuming _id is passed with the quiz data
+        state.record.userId = state.user?._id || ''; // Set the user ID if available
+        state.record.startTime = new Date().toISOString();  // Set start time when the quiz is loaded
     },
     resetQuiz: (state) => {
       state.quiz = {
@@ -97,5 +109,5 @@ export const authSlice = createSlice({
   }
 });
 
-export const { login, logout, setQuiz, resetQuiz, updateUserAnswer, finalizeQuiz } = authSlice.actions;
+export const { login, logout,setName, setQuiz, resetQuiz, updateUserAnswer, finalizeQuiz } = authSlice.actions;
 export default authSlice.reducer;

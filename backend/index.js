@@ -6,6 +6,7 @@ import connectDB from './database/db.js'
 import authRouter from './routes/auth.js'
 import quizRouter from './routes/quiz.js'
 import Quiz from './models/Quiz.js'
+import cors from 'cors';
 
 dotenv.config()
 const app = express()
@@ -13,6 +14,7 @@ const port = process.env.PORT || 3000
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(cors());
 
 // const sampleQuiz = new Quiz({
 //     title: "Sample Reasoning Test",
