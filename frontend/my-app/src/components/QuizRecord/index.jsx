@@ -3,20 +3,29 @@ import Header from '../Header'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { useState, useEffect } from 'react';
-import {useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import QuestionList from '../QuestionList/QuestionList';
 
 export default function QuizRecord() {
 
   const questions = useSelector((state) => state.auth.quiz?.questions);
+  const record = useSelector((state) => state.auth.record);
+  const firstName = useSelector((state) => state.auth.firstname);
+  const lastName = useSelector((state) => state.auth.lastname);
 
-     
+
   const [percentage, setPercentage] = useState(0);
   const [expanded, setExpanded] = useState(false);
-  const correctQuestions = 7;
-  const totalQuestions = 10;
-  const elapsedTime = 42;
-  const totalTime = 720;
+  const correctQuestions = record.score;
+  const totalQuestions = record.userAnswers.length;
+  const allTime = totalQuestions * 120;
+  const elapsedTime = record.totalTimeTaken;
+  const totalTime = allTime;
+
+  const strtTime = record.startTime;
+  const endTime = record.endTime;
+
+  const timeProgress = (elapsedTime / totalTime) * 100;
 
   const handleToggleAll = () => {
     setExpanded(!expanded);
@@ -41,8 +50,83 @@ export default function QuizRecord() {
     return () => clearInterval(interval); // Cleanup interval on unmount
   }, []);
 
+  const formatTime = (seconds) => {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+  
+    // Format hours, minutes, and seconds with leading zeros
+    const hrsStr = hrs < 10 ? `0${hrs}:` : `${hrs}:`;
+    const minsStr = mins < 10 ? `0${mins}:` : `${mins}:`;
+    const secsStr = secs < 10 ? `0${secs}` : `${secs}`;
+  
+  
+    return `${hrs > 0 ? hrsStr : '00:'}${minsStr}${secsStr}`;
+  };
 
-  const timeProgress = (elapsedTime / totalTime) * 100;
+  const formatStartTime = (dateString) => {
+    const date = new Date(dateString);
+  
+    const hours = date.getUTCHours(); // Use getUTCHours for UTC time
+    const minutes = date.getUTCMinutes(); // Use getUTCMinutes for UTC time
+  
+    // Format hours and minutes with leading zeros
+    const hoursStr = hours < 10 ? `0${hours}` : `${hours}`;
+    const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`;
+  
+    return `${hoursStr}:${minutesStr}`;
+  };
+  const formatDate =(dateString) =>{
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    const formattedDate = `${year}-${month}-${day}`;
+
+    return formattedDate;
+  }
+
+  const token = useSelector((state) => state.auth.token);
+
+  const saveRecord = async () =>{
+    try{
+      const data = {
+        userId: record.userId,
+        quizId: record.quizId,
+        userAnswers: record.userAnswers,
+        totalTimeTaken: record.totalTimeTaken,
+        score: record.score,
+        startTime: record.startTime,
+        endTime: record.endTime
+      }
+  
+      const response = await fetch('http://localhost:3000/exam/saveRecord', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+           "Access-Control-Allow-Origin": '*',
+           'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (response.ok) {
+        console.log(response);
+        alert('Record saved successfully');
+      } else {
+        alert('Failed to save record');
+      }
+
+    }
+    catch(err){
+      console.log(err)
+    }
+    
+  }
+
+
+ 
 
 
   return (
@@ -59,7 +143,7 @@ export default function QuizRecord() {
             </div>
             <div className='flex items-center justify-start flex-wrap mt-[10px] ml-[-14px]'>
               <button className='bg-white ml-[14px] relative items-center justify-center h-[40px] leading-5
-               flex mt-2 border rounded-md border-[#dfe6ed] px-[17px] box-border'>
+               flex mt-2 border rounded-md border-[#dfe6ed] px-[17px] box-border' onClick={saveRecord} >
                 <div className='w-[20px] h-fit ml-[-4px] mr-2'>
                   <img src='/icons8-bookmark (1).svg' alt='bookmark' />
                 </div>
@@ -87,7 +171,7 @@ export default function QuizRecord() {
             </div>
             <div className='flex flex-grow pr-1 pb-1 '>
               <div className='flex justify-between items-center flex-wrap mt-[-12px] mb-4' >
-                <p className='mt-3 text-[1.375rem] leading-6 font-[700] '>v sd</p>
+                <p className='mt-3 text-[1.375rem] leading-6 font-[700] '>{firstName} {lastName} </p>
 
               </div>
 
@@ -118,12 +202,15 @@ export default function QuizRecord() {
                 Thank you for taking the test!
 
               </div>
-              <div className='text-[1rem] leading-6 font-normal mt-[14px] mr-1 mb-2 ml-1'>
+              {percentage >= 50 ? (
                 <p className='mt-4 mb-4'>
                   Congratulations on completing the test!
                 </p>
-
-              </div>
+              ) : (
+                <p className='mt-4 mb-4 text-red-500'>
+                  Sorry, you did not ace the test. Try again next time!
+                </p>
+              )}
 
             </div>
 
@@ -201,14 +288,16 @@ export default function QuizRecord() {
                   </div>
                   <div className='text-[1.375rem] leading-6 mt-[14px] mr-1 mb-2 ml-1 text-[#0f2830] font-semibold flex gap-3 items-center'>
                     <p className='mt-4 mb-4 ml-1'>
-                      00:00:42
+                    {formatTime(record.totalTimeTaken)}
+                    {/* {record.totalTimeTaken} */}
                     </p>
                     <span className='text-[1.375rem] leading-6 mt-[14px] mr-1 mb-2 ml-1 font-semibold text-[#aeb9c6]'>
                       <span className=''>
                         /
                       </span>
                       <span className='ml-4'>
-                        00:12:00
+                      {formatTime(allTime)}
+                        {/* 00:12:00 */}
                       </span>
                     </span>
 
@@ -227,21 +316,29 @@ export default function QuizRecord() {
                   </div>
 
                   <div className='text-[1rem] leading-6 mt-[40px] mr-1 mb-2 ml-[6px] font-normal flex gap-3 justify-between items-center'>
-                    <div className='flex justify-between items-center gap-5'>  
+                    <div className='flex justify-between items-center gap-5'>
                       <p className='text-[16px] leading-6'>Start time</p>
-                      <p className='font-bold text-[16px] leading-6'>00:10</p>   
+                      <p className='font-bold text-[16px] leading-6'>
+                        {formatStartTime(strtTime)}
+                        {/* {strtTime} */}
+                        </p>
                     </div>
-                    <div className='flex justify-between items-center gap-5 pr-[92px]'>  
+                    <div className='flex justify-between items-center gap-5 pr-[92px]'>
                       <p className='text-[16px] leading-6'>Date</p>
-                      <p className='font-bold text-[16px] leading-6' >2024-08-08</p>   
+                      <p className='font-bold text-[16px] leading-6' >
+                        {formatDate(endTime)}
+                        </p>
                     </div>
                   </div>
                   <div className='text-[1rem] leading-6 mt-[20px] mr-1 mb-2 ml-[6px] font-normal flex gap-3 justify-between items-center'>
-                    <div className='flex justify-between items-center gap-5'>  
+                    <div className='flex justify-between items-center gap-5'>
                       <p className='text-[16px] leading-6'>End time</p>
-                      <p className='font-bold text-[16px] leading-6'>00:11</p>   
+                      <p className='font-bold text-[16px] leading-6'>
+                        {formatStartTime(endTime)}
+                        {/* {endTime} */}
+                        </p>
                     </div>
-                  
+
                   </div>
 
                 </div>
@@ -274,11 +371,11 @@ export default function QuizRecord() {
 
 
 
-    {/* Questions List */}
+      {/* Questions List */}
 
 
-    <div className='container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto box-border relative'>
-      <QuestionList/>
+      <div className='container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto box-border relative'>
+        <QuestionList questions={questions} />
       </div>
     </>
   )

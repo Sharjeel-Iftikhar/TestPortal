@@ -22,8 +22,16 @@ const quizRecordSchema = new mongoose.Schema({
                 type: String,
                 required: true
             },
+            correctAnswer:{
+                type: String,
+                required: true
+            },
             timeTaken:{
                 type: Number,
+                required: true
+            },
+            isCorrect:{
+                type: Boolean,
                 required: true
             }
         }

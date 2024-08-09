@@ -52,16 +52,18 @@ export const authSlice = createSlice({
 
     setQuiz: (state, action) => {
 
-    console.log(JSON.stringify(action.payload.title));
+    // console.log(JSON.stringify(action.payload));
       state.quiz.title = action.payload.title;
       state.quiz.questions = action.payload.questions;
+      state.record.quizId = action.payload._id;  // Assuming _id is passed with the quiz data
+      state.record.userId = state.user?._id || ''; // Set the user ID if available
+
+      state.record.startTime = new Date().toISOString();  // Set start time when the quiz is loaded
+
+      // console.log(state.record.startTime);
      
     },
-    recordQuiz: (state, action) => {
-        state.record.quizId = action.payload._id; // Assuming _id is passed with the quiz data
-        state.record.userId = state.user?._id || ''; // Set the user ID if available
-        state.record.startTime = new Date().toISOString();  // Set start time when the quiz is loaded
-    },
+    
     resetQuiz: (state) => {
       state.quiz = {
         title: '',
@@ -79,32 +81,56 @@ export const authSlice = createSlice({
     },
     updateUserAnswer: (state, action) => {
       const { questionId, userAnswer, timeTaken } = action.payload;
+      
+      const question = state.quiz.questions.find(q => q._id === questionId);
+      const correctAnswer = question.options
+        .filter(option => option.isCorrect)
+        .map(option => option.optionText);
+      
+      const formattedUserAnswer = Array.isArray(userAnswer)
+        ? userAnswer.join(',')
+        : userAnswer;
+    
+      const formattedCorrectAnswer = correctAnswer.join(',');
+    
+      const isCorrect = formattedUserAnswer === formattedCorrectAnswer;
+      
       const existingAnswerIndex = state.record.userAnswers.findIndex(
         (answer) => answer.questionId === questionId
       );
-
+      
       if (existingAnswerIndex > -1) {
         // Update the existing answer
         state.record.userAnswers[existingAnswerIndex] = {
           questionId,
-          userAnswer,
+          userAnswer: formattedUserAnswer,
+          correctAnswer: formattedCorrectAnswer,
           timeTaken,
+          isCorrect,
         };
       } else {
         // Add new answer
         state.record.userAnswers.push({
           questionId,
-          userAnswer,
+          userAnswer: formattedUserAnswer,
+          correctAnswer: formattedCorrectAnswer,
           timeTaken,
+          isCorrect,
         });
       }
-
+      
       state.record.totalTimeTaken += timeTaken; // Update the total time taken
     },
+
     finalizeQuiz: (state) => {
+      
       state.record.endTime = new Date().toISOString();
-      // Optionally, you can calculate the score here based on correct answers
-      // state.record.score = calculateScore(state.record.userAnswers, state.quiz.questions);
+  
+      // Calculate the score
+      state.record.score = state.record.userAnswers.reduce((score, answer) => {
+        return answer.isCorrect ? score + 1 : score;
+      }, 0);
+      console.log(state.record.score);
     }
   }
 });

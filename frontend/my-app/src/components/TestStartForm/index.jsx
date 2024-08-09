@@ -22,6 +22,7 @@ export default function TestStartForm() {
   });
 
   const token = useSelector((state) => state.auth.token);
+  const userId = useSelector((state) => state.auth.user._id);
   
   const fetchQuizData = async () => {
   
@@ -37,7 +38,10 @@ export default function TestStartForm() {
       });
       const data = await response.json();
      
-      console.log((data[0].questions));
+      const quizId = data[0]._id;
+      console.log("user id " + userId)
+      console.log("quiz id " + quizId)
+      
       
       if (data) {
         
@@ -46,7 +50,9 @@ export default function TestStartForm() {
         )
         dispatch(setQuiz({
           title: data[0].title,
-          questions: data[0].questions
+          questions: data[0].questions,
+          _id: quizId,
+          userId: userId
         }));
         navigate("/test");
       } else {
