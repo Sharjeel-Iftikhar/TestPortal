@@ -60,6 +60,9 @@ export const authSlice = createSlice({
 
       state.record.startTime = new Date().toISOString();  // Set start time when the quiz is loaded
 
+      state.firstname = action.payload.firstname;
+      state.lastname = action.payload.lastname;
+
       // console.log(state.record.startTime);
      
     },

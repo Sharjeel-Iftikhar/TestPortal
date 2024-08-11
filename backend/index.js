@@ -5,7 +5,7 @@ import connectDB from './database/db.js'
 
 import authRouter from './routes/auth.js'
 import quizRouter from './routes/quiz.js'
-import Quiz from './models/Quiz.js'
+import userRouter from './routes/user.js'
 import cors from 'cors';
 
 dotenv.config()
@@ -127,5 +127,6 @@ const start = async () => {
 
 app.use('/exam/auth', authRouter);
 app.use('/exam/',quizRouter);
+app.use('/user/',userRouter);
 
 start()

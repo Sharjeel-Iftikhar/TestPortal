@@ -5,6 +5,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import QuestionList from '../QuestionList/QuestionList';
+import Footer from '../Footer';
 
 export default function QuizRecord() {
 
@@ -89,6 +90,37 @@ export default function QuizRecord() {
 
   const token = useSelector((state) => state.auth.token);
 
+  const upateUser = async () => {
+    try {
+      const data = {
+        userId: record.userId,
+        firstName: firstName,
+        lastName: lastName
+      }
+
+      const response = await fetch('http://localhost:3000/user/update', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": '*',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        console.log(response);
+        console.log('User updated successfully');
+      } else {
+        console.log('Failed to update user');
+      }
+
+    }
+    catch (err) {
+      console.log(err)
+  }
+}
+
   const saveRecord = async () =>{
     try{
       const data = {
@@ -110,6 +142,7 @@ export default function QuizRecord() {
         },
         body: JSON.stringify(data),
       });
+      upateUser();
   
       if (response.ok) {
         console.log(response);
@@ -132,7 +165,7 @@ export default function QuizRecord() {
   return (
     <>
       <Header />
-      <div className='container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto box-border pt-[25px] relative mt-[5.9rem]'>
+      <div className='container 2xl:pl-[200px] 2xl:pr-[200px] w-full mx-auto box-border pt-[25px] relative mt-[5.9rem]'>
         <div className='border-none bg-white rounded-md p-5 mb-5 justify-between mt-[70px]'
           style={{ boxShadow: '3px 4px 10px rgba(201, 216, 225, .34)' }}>
           <div className='flex flex-wrap items-center mt-[-18px]'>
@@ -156,7 +189,7 @@ export default function QuizRecord() {
         </div>
       </div>
 
-      <div className='container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto box-border relative'>
+      <div className='container 2xl:pl-[200px] 2xl:pr-[200px] w-full mx-auto box-border relative'>
         <div className='test-card'>
 
           <span className='text-[.75rem] leading-6 font-semibold uppercase tracking-wider text-[#0f2830] mt-[1px] ml-[4px]'>
@@ -186,7 +219,7 @@ export default function QuizRecord() {
 
 
 
-      <div className='container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto box-border relative'>
+      <div className='container 2xl:pl-[200px] 2xl:pr-[200px] w-full mx-auto box-border relative'>
         <div className='test-card'>
           <span className='text-[.75rem] leading-6 font-semibold uppercase tracking-wider text-[#0f2830] mt-[1px] ml-[4px]'>
             Summary
@@ -223,7 +256,7 @@ export default function QuizRecord() {
 
       {/* Result Graphs */}
 
-      <div className='container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto box-border relative'>
+      <div className='container 2xl:pl-[200px] 2xl:pr-[200px] w-full mx-auto box-border relative'>
         <div className='flex content-between items-stretch gap-4'>
           <div className='flex flex-col flex-grow items-stretch basis-[50%]'>
             <div className='test-card basis-[100%]'>
@@ -349,34 +382,13 @@ export default function QuizRecord() {
           </div>
         </div>
       </div>
-      {/* <div className="p-4">
-      <button
-        onClick={handleToggleAll}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        {expanded ? 'Collapse All' : 'Expand All'}
-      </button>
-      <div>
-      {console.log(questions.length)}
-
-        { questions.map((question, index) => (
-          <QuestionItem
-            key={index}
-            question={question}
-            expanded={expanded}
-          />
-        ))}
-      </div>
-    </div> */}
+      
 
 
-
-      {/* Questions List */}
-
-
-      <div className='container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto box-border relative'>
+      <div className='container 2xl:pl-[200px] 2xl:pr-[200px] w-full mx-auto box-border relative'>
         <QuestionList questions={questions} />
       </div>
+      <Footer/>
     </>
   )
 }

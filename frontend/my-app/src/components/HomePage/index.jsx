@@ -6,15 +6,11 @@ import Header from '../Header/index'
 
 
 export const Home = () => {
-  
-
-  
-
 
   return (
     <>
     <Header/>
-    <div className='container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto pt-[25px] px-6 box-border relative mt-[5.9rem]'>
+    <div className='container 2xl:pl-[200px] 2xl:pr-[200px] w-full mx-auto pt-[25px] px-6 box-border relative mt-[5.9rem]'>
       <div className='border-none bg-white rounded-md p-5 mb-5 justify-between mt-[70px]' 
       style={{boxShadow: '3px 4px 10px rgba(201, 216, 225, .34)'}}>
         <div className='flex flex-wrap items-center mt-[-18px]'>
@@ -84,9 +80,10 @@ export const Home = () => {
       <TestStartForm/>
 
     </div>
-    <Footer/>
+    
 
     </div>
+    <Footer/>
     
 
     

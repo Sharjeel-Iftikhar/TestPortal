@@ -52,7 +52,9 @@ export default function TestStartForm() {
           title: data[0].title,
           questions: data[0].questions,
           _id: quizId,
-          userId: userId
+          userId: userId,
+          firstname: formData.FirstName,
+          lastname: formData.LastName
         }));
         navigate("/test");
       } else {
