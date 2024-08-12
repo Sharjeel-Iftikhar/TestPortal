@@ -9,12 +9,11 @@ import { useState } from 'react';
 import {updateUserAnswer} from "../../state";
 import {finalizeQuiz} from "../../state";
 
-let quizRenderCount = 0;
+
 
 const Quiz = () => {
 
-  quizRenderCount++;
-  console.log(`Quiz component render count: ${quizRenderCount}`);
+  
 
   const dispatch = useDispatch();
   const navigate = useNavigate();

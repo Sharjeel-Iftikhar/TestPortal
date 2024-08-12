@@ -95,14 +95,18 @@ export default function QuizRecord() {
   }
 
   const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
+  const user_id = user._id;
 
   const upateUser = async () => {
     try {
       const data = {
-        userId: record.userId,
-        firstName: firstName,
-        lastName: lastName
+        userId: user_id,
+        Firstname: firstName,
+        Lastname: lastName
       }
+
+      console.log(data);
 
       const response = await fetch('http://localhost:3000/user/update', {
         method: 'PATCH',
@@ -130,7 +134,7 @@ export default function QuizRecord() {
   const saveRecord = async () =>{
     try{
       const data = {
-        userId: record.userId,
+        userId: user_id,
         quizId: record.quizId,
         userAnswers: record.userAnswers,
         totalTimeTaken: record.totalTimeTaken,
@@ -138,6 +142,8 @@ export default function QuizRecord() {
         startTime: record.startTime,
         endTime: record.endTime
       }
+
+      console.log(data)
   
       const response = await fetch('http://localhost:3000/exam/saveRecord', {
         method: 'POST',
@@ -148,6 +154,7 @@ export default function QuizRecord() {
         },
         body: JSON.stringify(data),
       });
+
       upateUser();
   
       if (response.ok) {

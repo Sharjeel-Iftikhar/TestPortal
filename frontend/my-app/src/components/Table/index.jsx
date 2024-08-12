@@ -189,9 +189,9 @@ const QuizRecordTable = () => {
 
             return (
               <tr key={record._id} className="border-b border-gray-200">
-                <td className="p-2 text-start w-[12%]">{user?.Firstname}</td>
-                <td className="p-2 text-start w-[12%]">{user?.Lastname}</td>
-                <td className="p-2 text-start w-[12%]">
+                <td className="p-2 text-start w-[13%]">{user?.Firstname}</td>
+                <td className="p-2 text-start w-[13%]">{user?.Lastname}</td>
+                <td className="p-2 text-start w-[19%]">
                   <div
                     style={{
                       backgroundColor: percentage >= 50 ? 'green' : 'red',
