@@ -155,12 +155,17 @@ export default function QuizRecord() {
         body: JSON.stringify(data),
       });
 
-      upateUser();
+      
   
       if (response.ok) {
         console.log(response);
+        upateUser();
         alert('Record saved successfully');
-      } else {
+
+      }
+      else if (response.status === 409) {
+        alert("User record already exists")}
+       else {
         alert('Failed to save record');
       }
 

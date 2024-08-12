@@ -27,26 +27,35 @@ export const getQuizRecord = async (req, res) => {
 ///////////////////////  save the QuizRecord ///////////////////
 
 export const saveQuizRecord = async (req, res) => {
-    try {
-        const { quizId, userId, userAnswers, totalTimeTaken, score, startTime, endTime } = req.body;
+  try {
+      const { quizId, userId, userAnswers, totalTimeTaken, score, startTime, endTime } = req.body;
 
-        if (!quizId || !userId || !userAnswers || !totalTimeTaken || !score || !startTime || !endTime) {
-            return res.status(400).json({ error: 'All fields are required' });
-        }
+      if (!quizId || !userId || !userAnswers || !totalTimeTaken || !score || !startTime || !endTime) {
+          return res.status(400).json({ error: 'All fields are required' });
+      }
 
-        const quizRecord = new QuizRecord({
-            quizId,
-            userId,
-            userAnswers,
-            totalTimeTaken,
-            score,
-            startTime,
-            endTime
-        });
+      // Check if a record with the same quizId and userId already exists
+      const existingRecord = await QuizRecord.findOne({ quizId, userId });
 
-        await quizRecord.save();
-        res.status(201).json(quizRecord);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
+      if (existingRecord) {
+          return res.status(409).json({ error: 'A record for this quiz and user already exists' });
+      }
+
+      // Create and save the new quiz record
+      const quizRecord = new QuizRecord({
+          quizId,
+          userId,
+          userAnswers,
+          totalTimeTaken,
+          score,
+          startTime,
+          endTime
+      });
+
+      await quizRecord.save();
+      res.status(201).json(quizRecord);
+  } catch (error) {
+      res.status(400).json({ error: error.message });
+  }
 };
+
