@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useCallback, } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import QuestionCard from './index.jsx';
 import { useNavigate } from 'react-router-dom';
@@ -9,9 +9,12 @@ import { useState } from 'react';
 import {updateUserAnswer} from "../../state";
 import {finalizeQuiz} from "../../state";
 
-
+let quizRenderCount = 0;
 
 const Quiz = () => {
+
+  quizRenderCount++;
+  console.log(`Quiz component render count: ${quizRenderCount}`);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -20,60 +23,61 @@ const Quiz = () => {
   const [selectedOption, setSelectedOption] = useState([]);
   const [isQuizCompleted, setIsQuizCompleted] = useState(false);
 
+
+ 
   const questions = useSelector((state) => state.auth.quiz.questions);
-  const currentQuestion = questions[currentQuestionIndex];
-  const record = useSelector((state) => state.auth.record);
   
 
+  const currentQuestion = questions[currentQuestionIndex];
+  const record = useSelector((state) => state.auth.record);
 
   useEffect(() => {
-    if (isQuizCompleted) return;
-    if (timeLeft === 0) {
-      handleNextQuestion();
-      console.log("question id "+ currentQuestion._id);
-      console.log("time taken " + 120);
-      console.log("user answer "+ '') 
-      dispatch(updateUserAnswer({
-        questionId : currentQuestionIndex._id,
-        userAnswer: '',
-        timeTaken: 120
-      }))
+
+    if (!questions.length) {
+      navigate('/'); 
+      return;
+    }
+    if (isQuizCompleted) {
+     
+      return;
     }
     
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev > 0 ? prev - 1 : 0);
-    }, 1000);
+    if (timeLeft === 0) {
+      handleNextQuestion();
+      dispatch(updateUserAnswer({
+        questionId: questions[currentQuestionIndex]._id,
+        userAnswer: '',
+        timeTaken: 120
+      }));
+    }
+  }, [timeLeft, currentQuestionIndex, isQuizCompleted]);
 
-    return () => clearInterval(timer);
-  }, [timeLeft, currentQuestionIndex]);
+ 
 
 
-  const handleNextQuestion = () => {
+  const handleNextQuestion = useCallback(() => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption([]);
-      setTimeLeft(120);
+      setTimeLeft(120); // Reset time for next question
     } else {
-      // Handle end of quiz logic
-      dispatch(finalizeQuiz())
+      dispatch(finalizeQuiz());
       setIsQuizCompleted(true);
+      // localStorage.setItem('quizCompleted', 'true'); 
       alert('Quiz completed!');
-      
-      navigate('/record');
-      
-      
-      console.log(JSON.stringify(record));
+      navigate('/record', { replace: true });
     }
-  };
+  }, [currentQuestionIndex, dispatch, navigate, questions.length]);
 
+  if(!questions || !questions.length){
+    return <div>Loading...
+     
+    </div>;
+  }
   
-    
-  
-  
-
   return (
     <div>
-      <Header timeLeft={timeLeft} />
+      <Header timeLeft={timeLeft} setTimeLeft={setTimeLeft}  />
     
       {questions.length > 0 ? (
         <QuestionCard currentQuestionIndex = {currentQuestionIndex} questions={questions} 

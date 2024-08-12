@@ -3,24 +3,24 @@ import { useEffect,useState } from "react";
 import { useDispatch } from "react-redux";
 import {updateUserAnswer} from "../../state";
 
-import renderOptions from "../Render";
+import RenderOptions from "../Render";
+import { useNavigate } from "react-router-dom";
 import Footer from "../Footer";
 function QuestionCard({
-
-
-
   currentQuestionIndex,
-
   questions,
   handleNextQuestion,
   selectedOption,
   setSelectedOption,
 }) {
-  // const navigate = useNavigate();
+
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const currentQuestion = questions[currentQuestionIndex];
   const [startTime, setStartTime] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   useEffect(() => {
     const start = new Date();
@@ -28,11 +28,14 @@ function QuestionCard({
   }, [currentQuestionIndex]);
 
 
-  // const isMultipleChoice =
-  //   currentQuestion.options.filter((option) => option.isCorrect).length > 1;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const isValid = validateAnswer();
+    if (!isValid) {
+      return;
+    }
     console.log(selectedOption);
     console.log(currentQuestion._id+ "question id");
     const endTime = new Date();
@@ -46,6 +49,19 @@ function QuestionCard({
     handleNextQuestion();
 
   };
+
+ 
+  const validateAnswer = () => {
+    if (Array.isArray(selectedOption)) {
+      if (selectedOption.length === 0) {
+        setErrorMessage('user answer is required.');
+        return false;
+      }
+    }
+    setErrorMessage(''); 
+    return true;
+  };
+
   return (
     <>
     <div className="container 2xl:pl-[186px] 2xl:pr-[186px] w-full mx-auto pt-[25px] box-border relative mt-[5.9rem]">
@@ -74,11 +90,15 @@ function QuestionCard({
             )}
           </div>
           <form onSubmit={handleSubmit}>
-          {renderOptions({
+          {RenderOptions({
               currentQuestion,
               selectedOption,
-              setSelectedOption
+              setSelectedOption,
+              setErrorMessage, 
             })}
+            {errorMessage && (
+                <div className="text-red-600 mt-2">{errorMessage}</div>
+              )}
             <button
               type="submit"
               className="mt-4 py-2 px-4 bg-white text-black rounded hover:text-green-600 hover:outline-none

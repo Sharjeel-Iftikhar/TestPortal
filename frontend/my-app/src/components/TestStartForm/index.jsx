@@ -21,8 +21,12 @@ export default function TestStartForm() {
     lastName: false,
   });
 
-  const token = useSelector((state) => state.auth.token);
-  const userId = useSelector((state) => state.auth.user._id);
+  const token = localStorage.getItem('token');
+  const user = localStorage.getItem('user');
+  const userData = JSON.parse(user);
+  const userId = userData._id;
+  console.log(userData);
+
   
   const fetchQuizData = async () => {
   
@@ -41,6 +45,7 @@ export default function TestStartForm() {
       const quizId = data[0]._id;
       console.log("user id " + userId)
       console.log("quiz id " + quizId)
+      console.log(data);
       
       
       if (data) {
@@ -56,7 +61,9 @@ export default function TestStartForm() {
           firstname: formData.FirstName,
           lastname: formData.LastName
         }));
+        // sessionStorage.setItem('quizInProgress',true)
         navigate("/test");
+
       } else {
        
       }

@@ -1,10 +1,21 @@
 import React from "react";
+import { useEffect } from "react";
 
-const renderOptions = ({
+const RenderOptions = ({
   currentQuestion,
   selectedOption,
-  setSelectedOption
+  setSelectedOption,
+  setErrorMessage,
+ 
 }) => {
+
+  const handleOptionChange = (value) => {
+    setSelectedOption(value);
+    setErrorMessage('');
+  }
+
+
+
   const isMultipleChoice =
     currentQuestion.options.filter((option) => option.isCorrect).length > 1;
 
@@ -16,7 +27,7 @@ const renderOptions = ({
           className="w-[30%] p-2 border-b-2 border-gray-300 focus:border-green-500 outline-none mb-6 mt-4"
           placeholder="Type your answer here"
           value={selectedOption || ""}
-          onChange={(e) => setSelectedOption(e.target.value)}
+          onChange={(e) => handleOptionChange(e.target.value)}
         />
       </div>
     );
@@ -27,7 +38,7 @@ const renderOptions = ({
           type="checkbox"
           className="mr-4 h-6 w-6"
           checked={selectedOption === option.optionText}
-          onChange={() => setSelectedOption(option.optionText)}
+          onChange={() => handleOptionChange(option.optionText)}
         />
         <label>{option.optionText}</label>
       </div>
@@ -42,11 +53,11 @@ const renderOptions = ({
           checked={selectedOption.includes(option.optionText)}
           onChange={() => {
             if (selectedOption.includes(option.optionText)) {
-              setSelectedOption(
+              handleOptionChange(
                 selectedOption.filter((opt) => opt !== option.optionText)
               );
             } else {
-              setSelectedOption([...selectedOption, option.optionText]);
+              handleOptionChange([...selectedOption, option.optionText]);
             }
           }}
         />
@@ -65,11 +76,11 @@ const renderOptions = ({
             name="option"
             className="mr-4 h-6 w-6 border-gray-300 rounded-sm text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent"
             checked={selectedOption === option.optionText}
-            onChange={() => setSelectedOption(option.optionText)}
+            onChange={() => handleOptionChange(option.optionText)}
           />
           <label className="ml-2">
             <img
-              data-question-id={currentQuestion._id} // Add a unique identifier for the images
+              data-question-id={currentQuestion._id} 
               src={option.optionText}
               alt={`Option ${index + 1}`}
               className="w-[102px] h-auto object-contain"
@@ -85,7 +96,7 @@ const renderOptions = ({
             name="option"
             className="mr-4 h-6 w-6 border-gray-300 rounded-sm text-green-500 focus:ring-green-500 checked:bg-green-500 checked:border-transparent"
             checked={selectedOption === option.optionText}
-            onChange={() => setSelectedOption(option.optionText)}
+            onChange={() => handleOptionChange(option.optionText)}
           />
           <label className="ml-2">{option.optionText}</label>
         </div>
@@ -94,4 +105,4 @@ const renderOptions = ({
   }
 };
 
-export default renderOptions;
+export default RenderOptions;

@@ -73,6 +73,8 @@ const AuthComponent = () => {
     console.log(data.user);
     console.log(data.token);
     if (data) {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user',JSON.stringify(data.user));
       dispatch(login({
         user: data.user,
         token: data.token,

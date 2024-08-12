@@ -5,10 +5,11 @@ import 'react-circular-progressbar/dist/styles.css';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import QuestionList from '../QuestionList/QuestionList';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../Footer';
 
 export default function QuizRecord() {
-
+  const navigate = useNavigate();
   const questions = useSelector((state) => state.auth.quiz?.questions);
   const record = useSelector((state) => state.auth.record);
   const firstName = useSelector((state) => state.auth.firstname);
@@ -32,8 +33,13 @@ export default function QuizRecord() {
     setExpanded(!expanded);
   };
 
-
   useEffect(() => {
+
+    if (!questions.length) {
+      navigate('/');
+      return;
+    }
+    
     const targetPercentage = (correctQuestions / totalQuestions) * 100;
     const duration = 1000; // Duration of the animation in milliseconds
     const increment = targetPercentage / (duration / 10); // How much to increment each interval
@@ -88,7 +94,7 @@ export default function QuizRecord() {
     return formattedDate;
   }
 
-  const token = useSelector((state) => state.auth.token);
+  const token = localStorage.getItem('token');
 
   const upateUser = async () => {
     try {

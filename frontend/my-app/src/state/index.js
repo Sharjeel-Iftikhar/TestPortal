@@ -63,7 +63,8 @@ export const authSlice = createSlice({
       state.firstname = action.payload.firstname;
       state.lastname = action.payload.lastname;
 
-      // console.log(state.record.startTime);
+      console.log(state.quiz.questions);
+      console.log("data has been updated");
      
     },
     
@@ -84,12 +85,43 @@ export const authSlice = createSlice({
     },
     updateUserAnswer: (state, action) => {
       const { questionId, userAnswer, timeTaken } = action.payload;
-      
+    
+      // Check if the userAnswer is empty
+      if (userAnswer === '' || userAnswer.length === 0) {
+        const existingAnswerIndex = state.record.userAnswers.findIndex(
+          (answer) => answer.questionId === questionId
+        );
+    
+        if (existingAnswerIndex > -1) {
+          // Update the existing answer with an empty userAnswer
+          state.record.userAnswers[existingAnswerIndex] = {
+            questionId,
+            userAnswer: '',
+            correctAnswer: '',
+            timeTaken,
+            isCorrect: false, // If the answer is empty, it's not correct
+          };
+        } else {
+          // Add a new empty answer
+          state.record.userAnswers.push({
+            questionId,
+            userAnswer: '',
+            correctAnswer: '',
+            timeTaken,
+            isCorrect: false,
+          });
+        }
+    
+        state.record.totalTimeTaken += timeTaken; 
+        return;
+      }
+    
+      // Continue with the regular logic if userAnswer is not empty
       const question = state.quiz.questions.find(q => q._id === questionId);
       const correctAnswer = question.options
         .filter(option => option.isCorrect)
         .map(option => option.optionText);
-      
+    
       const formattedUserAnswer = Array.isArray(userAnswer)
         ? userAnswer.join(',')
         : userAnswer;
@@ -97,11 +129,11 @@ export const authSlice = createSlice({
       const formattedCorrectAnswer = correctAnswer.join(',');
     
       const isCorrect = formattedUserAnswer === formattedCorrectAnswer;
-      
+    
       const existingAnswerIndex = state.record.userAnswers.findIndex(
         (answer) => answer.questionId === questionId
       );
-      
+    
       if (existingAnswerIndex > -1) {
         // Update the existing answer
         state.record.userAnswers[existingAnswerIndex] = {
@@ -121,10 +153,9 @@ export const authSlice = createSlice({
           isCorrect,
         });
       }
-      
+    
       state.record.totalTimeTaken += timeTaken; // Update the total time taken
     },
-
     finalizeQuiz: (state) => {
       
       state.record.endTime = new Date().toISOString();

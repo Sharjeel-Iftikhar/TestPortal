@@ -4,21 +4,19 @@ import './App.css';
 import AuthComponent from './components/LoginPage/index'
 
 import Home from './components/HomePage/index'
-import Quiz from './components/QuestionCard/Quiz';
+import ProtectedQuiz from './components/QuestionCard/ProtectedQuiz';
+import QuizWrapper from './components/QuestionCard/QuizWrapper';
 import Record from './components/QuizRecord/index';
 import ProtectedRoute from './Routes';
-import { useSelector } from 'react-redux';
+
 import QuizRecordTable from './components/Table/index'
 import QuizRecordTableWrapper from './components/Table/RecordTable'
 
 
-
-
-
-
 function App() {
-  const user = useSelector((state) => state.auth.user);
-  // console.log(user ? 'User is logged in' : 'User is not logged in');
+  const userDate = localStorage.getItem('user');
+  const user = JSON.parse(userDate);
+  console.log(user ? 'User is logged in' : 'User is not logged in');
  
   
   return (
@@ -36,7 +34,7 @@ function App() {
         {/* protected routes */}
         
         <Route path="/" element={<ProtectedRoute element={Home} />} />
-          <Route path="/test" element={<ProtectedRoute element={Quiz} />} />
+          <Route path="/test" element={<ProtectedRoute element={ProtectedQuiz} />} />
           <Route path="/record" element={<ProtectedRoute element={Record} />} />
           <Route
           path="/allData"

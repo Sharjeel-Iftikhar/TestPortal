@@ -11,7 +11,7 @@ const QuizRecordTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const token = useSelector((state) => state.auth.token);
+  const token = localStorage.getItem('token');
 
   // Fetch quiz records from the API
   const fetchQuizRecords = async () => {
@@ -161,7 +161,7 @@ const QuizRecordTable = () => {
                 placeholder="Filter"
                 value={firstNameFilter}
                 onChange={(e) => setFirstNameFilter(e.target.value)}
-                className="p-1 border-b border-gray-300 rounded-md text-sm"
+                className="p-1 border-b border-gray-300 rounded-md text-sm w-[80%]"
               />
             </td>
             <td className="p-2">
@@ -170,7 +170,7 @@ const QuizRecordTable = () => {
                 placeholder="Filter"
                 value={lastNameFilter}
                 onChange={(e) => setLastNameFilter(e.target.value)}
-                className="p-1 border-b border-gray-300 rounded-md text-sm"
+                className="p-1 border-b border-gray-300 rounded-md text-sm w-[80%]"
               />
             </td>
             <td className="p-3"></td>
@@ -189,9 +189,9 @@ const QuizRecordTable = () => {
 
             return (
               <tr key={record._id} className="border-b border-gray-200">
-                <td className="p-2 text-start w-[14%]">{user?.Firstname}</td>
-                <td className="p-2 text-start w-[14%]">{user?.Lastname}</td>
-                <td className="p-2 text-start w-[14%]">
+                <td className="p-2 text-start w-[12%]">{user?.Firstname}</td>
+                <td className="p-2 text-start w-[12%]">{user?.Lastname}</td>
+                <td className="p-2 text-start w-[12%]">
                   <div
                     style={{
                       backgroundColor: percentage >= 50 ? 'green' : 'red',
@@ -213,7 +213,7 @@ const QuizRecordTable = () => {
                         padding: '5px',
                         borderRadius: '5px',
                         textAlign: 'center',
-                        width: '65%',
+                        width: category === 'Inductive Reasoning' ? '65%' : category === 'Generic' ? '80%' : '100%',
                         margin: '0 auto'
                       }}
                     >

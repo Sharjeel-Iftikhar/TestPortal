@@ -1,12 +1,14 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-const Header = ({ timeLeft}) => {
+const Header = ({ timeLeft,setTimeLeft}) => {
   const location = useLocation();
   const isAuthScreen = location.pathname === '/login' || location.pathname === '/signup';
   const isTestScreen = location.pathname === '/test';
   const isHomeScreen = location.pathname === '/';
+
 
   const navigate = useNavigate();
 
@@ -14,13 +16,23 @@ const Header = ({ timeLeft}) => {
     navigate('/allData');
   }
 
+  useEffect(() => {
+    if (!isTestScreen || timeLeft === undefined) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev > 0 ? prev - 1 : 0);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isTestScreen, setTimeLeft]);
+
   return (
     <header
       style={{ boxShadow: '3px 4px 10px rgba(36, 50, 57, 0.03)' }}
       className={`bg-white border-b border-gray-200 w-full flex items-center ${isAuthScreen ? 'h-[57px]' : 'fixed top-0 z-10 h-[71px]'}`}
     >
       <div className={`container lg:mx-auto 2xl:pl-[200px] 2xl:pr-[200px] ${isAuthScreen ? 'flex justify-center' : 'flex justify-between'}`}>
-        <span className={`h-8`}>
+        <span className={`h-8`} onClick={() => navigate('/')}>
           <img src='/testportal-logo.svg' alt="Logo" className="w-auto h-[30px]" />
         </span>
         {isTestScreen && timeLeft !== undefined && (
@@ -50,3 +62,4 @@ const Header = ({ timeLeft}) => {
 };
 
 export default Header;
+
