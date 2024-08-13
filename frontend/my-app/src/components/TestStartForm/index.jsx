@@ -1,10 +1,10 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { setName } from "../../state";
 import { setQuiz } from "../../state";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function TestStartForm() {
   const dispatch = useDispatch();

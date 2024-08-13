@@ -29,9 +29,9 @@ export default function QuizRecord() {
 
   const timeProgress = (elapsedTime / totalTime) * 100;
 
-  const handleToggleAll = () => {
-    setExpanded(!expanded);
-  };
+  // const handleToggleAll = () => {
+  //   setExpanded(!expanded);
+  // };
 
   useEffect(() => {
 

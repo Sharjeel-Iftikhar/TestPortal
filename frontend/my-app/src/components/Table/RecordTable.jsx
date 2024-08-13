@@ -1,6 +1,6 @@
 import React from 'react';
 import QuizRecordTable from './index';
-import { useSelector } from 'react-redux';
+
 import Header from '../Header';
 import Footer from '../Footer';
 

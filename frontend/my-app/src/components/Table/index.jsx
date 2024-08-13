@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from "react-redux";
+
 
 const QuizRecordTable = () => {
   const [quizRecords, setQuizRecords] = useState([]);
